@@ -2,8 +2,10 @@
 The goal, of this section, is to clarify how developers interact with the framework and how the core features solves real-world problems.
 
 \subsection{Developer Personas}\label{subsec:use_cases-developer_personas}
+Developers are sorted into categories by their expertise.
+For each category different developer persona is created and analyzed.
 
-\subsubsection{Beginner Web Developer}
+\subsubsection{DP1: Beginner Web Developer}
 While the system is not designed for beginner web developers it is definitely a step up from the relatively low-level API
 that PHP provides out of the box.
 RouteChasm provides certain features that tailor to fast deployment of prototype websites and these features may be used
@@ -12,14 +14,14 @@ Some of these features my include: imperative route declaration, simple database
 These concepts are easy to learn and are the essential tools for creating any full-stack web solution.
 The beginner developer benefits from conventional architecture for each layer of abstraction.
 
-\subsubsection{Intermediate and Expert Web Developers}
+\subsubsection{DP2: Intermediate and Expert Web Developers}
 The target audience of RouteChasm are developers who are experienced in full-stack development with and without frameworks,
 because RouteChasm adds a lot of features that build upon concepts from low-level technologies.
 Developers deeply familiar with PHP, SQL, HTML, CSS, and Javascript are going to have the leanest learning curve with the framework.
 The developer persona expects predictable architecture, reusable components, and the ability to customize default behavior
 and RouteChasm can satisfy all these claims.
 
-\subsubsection{Tooling and Library Developer}
+\subsubsection{DP3: Tooling and Library Developer}
 RouteChasm's aim to have all the systems easily extensible generates endless possibilities for tools and libraries to be
 created for the framework.
 Developers can create custom content rendering views.
@@ -27,6 +29,7 @@ Libraries can access and work with application database or external database or 
 System administrators can download package of third party editor components.
 
 \subsection{Primary Use Cases}\label{subsec:use_cases-primary_use_cases}
+The primary use cases of RouteChasm focus on simplifying web development and removing unnecessary boilerplate.
 
 \subsubsection{UC1: Define a Database Table}
 A developer defines a new database table, after which RouteChasm automatically provides table querying operations (first, all).
@@ -40,6 +43,6 @@ or custom components.
 The editor stores metadata required for rendering and persists the final structure on the server.
 If desired component is not implemented it can be easily created with AI generation component.
 
-\subsubsection{UC4: Render Content Through a Unified Abstraction Layer}
+\subsubsection{UC3: Render Content Through a Unified Abstraction Layer}
 A developer renders content using RouteChasm's abstraction layer that unifies routing, templates, database access, and component metadata.
 This reduces the need for manual wiring between layers while providing the benefits of decoupled logic for each layer.
