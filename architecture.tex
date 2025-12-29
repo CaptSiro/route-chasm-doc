@@ -1,0 +1,65 @@
+\section{Architecture}\label{sec:architecture}
+This section describes the overall architecture of RouteChasm and explains how its major systems interact.
+
+\subsection{High-Level Structure}\label{subsec:architecture-high-level_structure}
+RouteChasm follows a modular architecture composed of mostly independent extensible systems.
+Each system is responsible for a specific layer of the web development stack.
+The framework avoids external dependencies to ensure uniform design across the codebase.
+
+\subsubsection{Routing}
+The routing layer is represented as a graph of vertexes (actions) and edges (routes).
+Routes may be static or dynamic.
+The dynamic routes provide spaces directly in the request path to store variables.
+The routing system provides Controller interface but Action interface is preferred.
+For example, View-based components can be used to as actions for routing, when the route performs the action,
+the rendered View is returned.
+Using the action philosophy opens the functional pattern, which means function definition is valid implementation of Action.
+
+By default, the routing system does not distinguish between HTTP methods, the philosophy is passed on the implementation
+of the action to perform when the correct HTTP method is used.
+The action can either handle the HTTP method switching directly or wrap itself in middleware provided by the routing system.
+
+\subsubsection{Database Abstraction}
+The database layer is multi-database by default, which means that the solution may connect to many databases with differing types.
+The framework implementation of database layer only includes SQL-like database connectors.z
+
+For each database table there is corresponding PHP class that extends the Model class
+(exploding NxN connection tables and similar).
+Each Model class is mapped to table within selected database via PHP class properties.
+The same attribute system is used for tying table column to property.
+
+\subsubsection{Rendering System}
+The rendering system is build for extensibility and ease of use first.
+The developers can create multiple templates for one View.
+The rendering system supports multiple output formats, thus it View can be rendered as HTML page with styling
+and functionality provided by CSS and Javascript respectively or sending the View as JSON API response.
+
+\subsubsection{Widget-Based Editor}
+All the essential widgets are built on the same foundation.
+The widget defines minimal JSON structure from which the whole widget can be built again.
+Some of the properties as exported to the Inspector where the creator can manage the properties directly.
+Widget system is build for load speed, such that unnecessary modifications to make the widget editable are not executed
+when rendered as view-only.
+
+\subsubsection{AI System}
+The AI translation provides fast automated translation of phrases for all supported languages.
+The AI generation enables quick mockups for producers to pass the developer team thus reducing manual workload
+and accelerating development.
+The AI system provides complete declarative JSON response schema solution.
+Each prompt to the AI is View and uses templates to achieve clean prompts.
+
+\subsection{Sideloader System}\label{subsec:architecture-sideloader}
+RouteChasm uses server-side content rendering, but it also supports HTML components streaming.
+The problem arises when HTML component needs a resource, most of the time external styles or scripts, but the page
+did not load the needed resources.
+The Sideloader System solves this problem by automatically importing resources via custom HTTP headers.
+If header is filled with resources that need to present for the element and the page does not have those resource,
+they are automatically fetched and then integrated into the webpage (styles are applied and scripts are executed).
+This system provides unified resource loading with real-time interactivity and minimal download sizes.
+
+\subsection{Architectural Rationale}\label{subsec:architecture-architectural_rationale}
+The chosen architecture prioritizes simplicity, extensibility, and full control over the behavior at each step of the process.
+Avoidance of third-party libraries prevents hidden abstractions, dependency conflicts, and provides unified implementation.
+The AI systems were designed as extensions to the architecture.
+The implementation does not interfere with other systems.
+All RouteChasm systems are designed to be easily understood and provide simple ways to edit their functionality.

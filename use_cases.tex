@@ -14,6 +14,8 @@ Some of these features my include: imperative route declaration, simple database
 These concepts are easy to learn and are the essential tools for creating any full-stack web solution.
 The beginner developer benefits from conventional architecture for each layer of abstraction.
 
+Needs of DP1: Simple and transferable concepts, straightforward implementation
+
 \subsubsection{DP2: Intermediate and Expert Web Developers}
 The target audience of RouteChasm are developers who are experienced in full-stack development with and without frameworks,
 because RouteChasm adds a lot of features that build upon concepts from low-level technologies.
@@ -21,12 +23,16 @@ Developers deeply familiar with PHP, SQL, HTML, CSS, and Javascript are going to
 The developer persona expects predictable architecture, reusable components, and the ability to customize default behavior
 and RouteChasm can satisfy all these claims.
 
+Needs of DP2: Predictable architecture, documented code, debug utilities
+
 \subsubsection{DP3: Tooling and Library Developer}
 RouteChasm's aim to have all the systems easily extensible generates endless possibilities for tools and libraries to be
 created for the framework.
 Developers can create custom content rendering views.
 Libraries can access and work with application database or external database or define sandboxed routing trees.
 System administrators can download package of third party editor components.
+
+Needs of DP3: Extensible code, readable source code
 
 \subsection{Primary Use Cases}\label{subsec:use_cases-primary_use_cases}
 The primary use cases of RouteChasm focus on simplifying web development and removing unnecessary boilerplate.
@@ -46,3 +52,16 @@ If desired component is not implemented it can be easily created with AI generat
 \subsubsection{UC3: Render Content Through a Unified Abstraction Layer}
 A developer renders content using RouteChasm's abstraction layer that unifies routing, templates, database access, and component metadata.
 This reduces the need for manual wiring between layers while providing the benefits of decoupled logic for each layer.
+
+\subsubsection{UC4: Extend Default Form Generation}
+A developer modifies the automatically generated form by overriding the default form controls or injecting custom controls.
+RouteChasm preserves the simplicity of automatic forms while allowing targeted customization without rewriting the whole stack.
+
+\subsubsection{UC5: Custom Static Webpage}
+A producer wants to draft out a simple static webpage without touching code but providing some sample for the developer
+team.
+RouteChasm comes with out-of-the-box solution for AI generated static webpages.
+
+\subsubsection{UC6: Automatically Generate Translations for Static Text}
+A developer defines phrase in template and in the admin dashboard the producers can write translations directly or
+off-load the work on AI, which generates fitting translations.
