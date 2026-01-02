@@ -1,0 +1,150 @@
+\section{Implementation}\label{sec:implementation}
+This section describes the practical implementation of RouteChasm, including its
+class structure, key modules, database abstraction, forms, editor infrastructure,
+and AI integration.
+The goal is to explain how the framework was built in practice,
+while presenting only representative examples rather than exhaustive code listings.
+
+\subsection{Class Structure and Core Modules}\label{subsec:class-structure-and-core-modules}
+RouteChasm consists of 450 PHP classes and more added with each feature. These classes are divided into clearly defined
+subsystems.
+The framework follows a convention-driven architecture where systems serve as the primary organizational units.
+Each system is responsible for routing, request handling, view rendering, and optional editor integration.
+
+At the core of the framework lie several foundational base classes:
+
+\begin{itemize}
+    \item \textbf{App} -- defines routing entry point and creates HTTP Request and Response handles, manages environment
+        configuration and general application-wide configurations, manages modules
+    \item \textbf{Model} -- represents database entities and provides query functions to fetch one or many model
+        instances and to update or delete those instances
+    \item \textbf{Action} -- defines interface for routing actions
+    \item \textbf{View} -- defines interface for rendering
+    \item \textbf{Component} -- ties \textbf{Action} and \textbf{View} to a single base class. All classes extending
+        the class are rendered when executed as \textbf{Action}
+    \item \textbf{Widget} -- represents reusable component used by the website content editor
+\end{itemize}
+
+The code is structured into a few main pillars:
+
+\begin{itemize}
+    \item \textbf{Core} -- Core systems of RouteChasms. This includes: actions, caching, custom collections,
+        communication, configuration logic, database system, forms, file system, locale, routing, sideloader, sql,
+        translation, url, view rendering logic, and other utilities
+    \item \textbf{Components} -- All views that can be rendered are found here together with render-able actions,
+        whole page templates, AI prompts, and webpage content editor with its widgets
+    \item \textbf{Modules} -- All added functionality and language locales are stored in this directory
+    \item \textbf{Tests} -- Contains test cases that are automatically run on demand in the admin dashboard and provide
+        reassurance that all core features work as expected
+\end{itemize}
+
+All systems expect Java style namespace convention, each word is separate directory.
+To the edition of components being stored in a special directory they are also permitted to use PascalCase names as
+directory names.
+For example \textbf{BreadCrumbs} view has the following structure:
+
+\begin{verbatim}
+components/
+|   core/
+|   |   BreadCrumbs/
+|   |   |   bread-crumbs.css
+|   |   |   BreadCrumbs.php
+|   |   |   BreadCrumbs.phtml
+\end{verbatim}
+
+This style of structure allows the view to be alongside all the templates (BreadCrumbs.phtml) as well as additional
+resources (bread-crumbs.css).
+
+The structure ensures maintainability and simplifies navigation within a large codebase.
+
+\subsection{Routing System}\label{subsec:routing-system}
+Routing follows a convention-over-configuration approach.
+Each system declares its available HTTP endpoints and associates them with handlers.
+A simplified example:
+
+\begin{verbatim}
+    $users = new Users();
+    $route->use('/users', $users);
+    $route->use('/users/create', $users);
+\end{verbatim}
+
+The separation of HTTP method execution is handled by the perform method of Users class.
+The Request and Response objects are provided as arguments to the function.
+
+\subsection{Database Layer}\label{subsec:database-layer}
+The model layer abstracts database tables through PHP classes.
+Each model declares its associated table and columns through PHP attributes.
+
+\begin{verbatim}
+    #[Database(App::DATABASE)]
+    #[Table('users')]
+    class User extends Model {
+        #[Column('id_user', Column::TYPE_INTEGER, primaryKey: true)]
+        protected int $id;
+
+        #[Column('name', Column::TYPE_STRING)]
+        protected string $name;
+    }
+\end{verbatim}
+
+From this definition, RouteChasm is capable of:
+
+\begin{itemize}
+    \item executing standard fetch queries (first, all, fromId)
+    \item creating new User records in database
+    \item updating User record
+    \item deleting User record
+\end{itemize}
+
+Database access avoids third-party ORM libraries to maintain complete control and predictable architecture.
+
+\subsection{Forms and Grids}\label{subsec:form-metadata}
+Forms and Grids for models extend the PHP attribute driven description and provides attributes to create a simple forms.
+The example for models can be extended like so to generate form with text field for name.
+The Grid description creates a grid with two columns id and name.
+
+\begin{verbatim}
+    #[Grid]
+    #[Database(App::DATABASE)]
+    #[Table('users')]
+    class User extends Model {
+        #[GridColumn]
+        #[Column('id_user', Column::TYPE_INTEGER, primaryKey: true)]
+        protected int $id;
+
+        #[TextField]
+        #[GridColumn]
+        #[Column('name', Column::TYPE_STRING)]
+        protected string $name;
+    }
+\end{verbatim}
+
+Metadata described in PHP attributes are used by the class + Description classes:
+
+\begin{itemize}
+    \item \textbf{ModelDescription} -- exposes all possible queries that can be done on Model class
+    \item \textbf{FormDescription} -- creates default behavior for admin dashboard editors
+    \item \textbf{GridDescription} -- creates factory for creating render-able Grid instances
+\end{itemize}
+
+\subsection{Webpage Content Editor Infrastructure}\label{subsec:webpage-content-editor-infrastructure}
+The component-based webpage editor is implemented as a hybrid system.
+PHP defines the available components and metadata, while JavaScript manages interactive editing on the client side.
+Components are stored as structured object on server and rendered into HTML during runtime.
+
+When a user edits and saves a page, the browser communicates changes back to the server.
+The server persists the component tree.
+
+\subsection{AI Translation and Component Generation}\label{subsec:ai-translation-and-component-generation}
+The AI subsystem is integrated as a standalone utility.
+The translation unit processes labels, texts, and other strings and produces alternative language versions.
+The AI generation unit produces template definitions and component structures.
+
+Integration of AI generated outputs is designed to be as simple as possible.
+This approach creates environment where AI does not have the space to hallucinate weird outcomes.
+All AI generated components are editable or remove-able such that mistakes are easily corrected.
+
+\subsection{Summary}\label{subsec:summary}
+The implementation of RouteChasm emphasizes tight integration across all its systems.
+Despite its large internal size, the framework maintains a clear architecture that supports extensibility
+and long-term maintainability.
