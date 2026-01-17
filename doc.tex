@@ -11,6 +11,8 @@
 \usepackage{graphicx}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 \usepackage{float}
+\usepackage[backend=biber,style=numeric]{biblatex}
+\addbibresource{references.bib}
 
 \title{RouteChasm}
 \author{Jan Horák}
@@ -27,6 +29,10 @@
     \clearpage
 
     \input{introduction}
+
+    \clearpage
+
+    \input{technical_research}
 
     \clearpage
 
@@ -47,5 +53,11 @@
     \clearpage
 
     \input{implementation}
+
+    \clearpage
+
+    \nocite{*}
+
+    \printbibliography[title={References}, heading=bibintoc]
 
 \end{document}
