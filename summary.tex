@@ -1,0 +1,40 @@
+\section{Summary}\label{sec:summary}
+The implementation of RouteChasm emphasizes tight integration across all its systems.
+Despite its large internal size, the framework maintains a clear architecture that supports extensibility
+and long-term maintainability.
+
+From creators point of view, the database layer implementation is intuitive, fast, and flexible.
+It is by far the best designed system in RouteChasm.
+
+The View architecture is also well-defined, although it bloats the project with deep directory structure.
+This problem is planned to be addressed in the future.
+
+Routing system went through many iterations and the latest one is the best, but it still has its flaws and quirks.
+Implementation wise it is well-designed.
+Usability wise it is not in a good spot.
+
+The worst implementation is most likely the App class, which collects more and more technical debt with each new
+feature.
+The proper segmentation of App class has one of the highest priorities.
+
+The Webpage Content Editor still uses outdated Editor which lacks crucial functionalities.
+This component has the highest priority and in the near future it will have to be reimagined from scratch,
+because the core architecture is not on par with the rest of the project.
+
+AI system is implemented well, small tweaks are going to be needed.
+
+All Framework Requirements are implemented and functional.
+Some Non-Functional Requirements are loosely met.
+Subjectively, the system performance is lacking [NFR3].
+The performance is not noticeable, but 50ms execution time for a simple request is rather big toll.
+RouteChasm is defined to be extensible and thus uses a lot of code from many files, which need to read, parsed, and
+executed.
+This decision adds delay to the execution process.
+The framework is still use-able for small and medium size project where there may be only a few requests a second
+during peak loads.
+Some parts of the code do not follow the RouteChasms framework philosophy [NFR5].
+This applies for legacy code or rushed feature code.
+The culprits are going to be investigated in the near future and updated to follow the RouteChasm philosophy.
+
+Overall I think that RouteChasm delivers on its goal well, it is robust maintainable extensible full-stack
+solution for many web applications that may or may not use its AI functionalities.
