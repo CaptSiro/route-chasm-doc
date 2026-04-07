@@ -96,6 +96,41 @@ From this definition, RouteChasm is capable of:
     \item deleting User record
 \end{itemize}
 
+All Query function uses parametrized query if needed.
+For example to remove record from users table with id 4.
+
+\begin{verbatim}
+    // Creates DeleteQuery object
+    $query = Sql::delete('users');
+
+    // DELETE query is requred to have where clause
+    // Query::infer automatically infers the parameter type (TYPE_INT)
+    $query->where(Query::infer('id_user = ?', 4));
+\end{verbatim}
+
+If the developers use provided Query classes correctly there shall never be SQL injection.
+The Database Layer provides default fetching functions first and all which uses the same Query object.
+Default implementation of first and all functions return values from all columns and return one or many User objects.
+Fetch function uses the projection parameter to add developer defined SQL query projection optimization.
+Implementation of Database Layer does not use the \("\)SELECT *\("\) projection variant although SelectQuery objects
+uses it if projection is not set.
+This approach is not encouraged.
+
+\begin{verbatim}
+    // Returns all User class defined columns
+    // SELECT id_user, name FROM ...
+    User::first(where: Query::infer('id_user = ?', 4));
+
+    // Returns projection columns
+    // SELECT name FROM ...
+    User::first(projection: ['name'], where: Query::infer('id_user = ?', 4));
+
+    // Manual select query
+    // Uses SELECT * FROM ... because projection is not set
+    $query = Sql::select('users')
+        ->where(Query::infer('id_user = ?', 4));
+\end{verbatim}
+
 Database access avoids third-party ORM libraries to maintain complete control and predictable architecture.
 
 \subsection{Forms and Grids}\label{subsec:form-metadata}
@@ -143,8 +178,3 @@ The AI generation unit produces template definitions and component structures.
 Integration of AI generated outputs is designed to be as simple as possible.
 This approach creates environment where AI does not have the space to hallucinate weird outcomes.
 All AI generated components are editable or remove-able such that mistakes are easily corrected.
-
-\subsection{Summary}\label{subsec:summary}
-The implementation of RouteChasm emphasizes tight integration across all its systems.
-Despite its large internal size, the framework maintains a clear architecture that supports extensibility
-and long-term maintainability.
